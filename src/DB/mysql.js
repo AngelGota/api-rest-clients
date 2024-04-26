@@ -36,17 +36,61 @@ conMysql();
 function all(table) {
   return new Promise((resolve, reject) => {
     conection.query(`SELECT * FROM ${table}`, (error, result) => {
-      if (error) return reject(error);
-      resolve(result);
+      return error ? reject(error) : resolve(result);
     });
   });
 }
 
-function one(table, id) {}
+function one(table, id) {
+  return new Promise((resolve, reject) => {
+    conection.query(
+      `SELECT * FROM ${table} WHERE ID=${id}`,
+      (error, result) => {
+        return error ? reject(error) : resolve(result);
+      }
+    );
+  });
+}
 
-function add(table, data) {}
+function insert(table, data) {
+  return new Promise((resolve, reject) => {
+    conection.query(`INSERT INTO ${table} SET ?`, data, (error, result) => {
+      return error ? reject(error) : resolve(result);
+    });
+  });
+}
 
-function deleted(table, id) {}
+function update(table, data) {
+  return new Promise((resolve, reject) => {
+    conection.query(
+      `UPDATE ${table} SET ? WHERE id = ?`,
+      [data, data.id],
+      (error, result) => {
+        return error ? reject(error) : resolve(result);
+      }
+    );
+  });
+}
+
+function add(table, data) {
+  if (data && data.id == 0) {
+    return insert(table, data);
+  } else {
+    return update(table, data);
+  }
+}
+
+function deleted(table, data) {
+  return new Promise((resolve, reject) => {
+    conection.query(
+      `DELETE FROM ${table} WHERE ID=?`,
+      data.id,
+      (error, result) => {
+        return error ? reject(error) : resolve(result);
+      }
+    );
+  });
+}
 
 module.exports = {
   all,
