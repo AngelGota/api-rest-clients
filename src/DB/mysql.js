@@ -52,32 +52,16 @@ function one(table, id) {
   });
 }
 
-function insert(table, data) {
-  return new Promise((resolve, reject) => {
-    conection.query(`INSERT INTO ${table} SET ?`, data, (error, result) => {
-      return error ? reject(error) : resolve(result);
-    });
-  });
-}
-
-function update(table, data) {
+function add(table, data) {
   return new Promise((resolve, reject) => {
     conection.query(
-      `UPDATE ${table} SET ? WHERE id = ?`,
-      [data, data.id],
+      `INSERT INTO ${table} SET ? ON DUPLICATE KEY UPDATE ?`,
+      [data, data],
       (error, result) => {
         return error ? reject(error) : resolve(result);
       }
     );
   });
-}
-
-function add(table, data) {
-  if (data && data.id == 0) {
-    return insert(table, data);
-  } else {
-    return update(table, data);
-  }
 }
 
 function deleted(table, data) {

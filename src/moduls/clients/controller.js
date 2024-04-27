@@ -1,26 +1,31 @@
-const db = require("../../DB/mysql.js");
-
 const TABLA = "clients";
+module.exports = function (dbinject) {
+  let db = dbinject;
 
-function all() {
-  return db.all(TABLA);
-}
+  if (!db) {
+    db = require("../../DB/mysql.js");
+  }
 
-function one(id) {
-  return db.one(TABLA, id);
-}
+  function all() {
+    return db.all(TABLA);
+  }
 
-function add(body) {
-  return db.add(TABLA, body);
-}
+  function one(id) {
+    return db.one(TABLA, id);
+  }
 
-function deleted(body) {
-  return db.deleted(TABLA, body);
-}
+  function add(body) {
+    return db.add(TABLA, body);
+  }
 
-module.exports = {
-  all,
-  one,
-  deleted,
-  add,
+  function deleted(body) {
+    return db.deleted(TABLA, body);
+  }
+
+  return {
+    all,
+    one,
+    deleted,
+    add,
+  };
 };
