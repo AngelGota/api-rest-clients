@@ -76,9 +76,22 @@ function deleted(table, data) {
   });
 }
 
+function query(table, consult) {
+  return new Promise((resolve, reject) => {
+    conection.query(
+      `SELECT * FROM ${table} WHERE ?`,
+      consult,
+      (error, result) => {
+        return error ? reject(error) : resolve(result[0]);
+      }
+    );
+  });
+}
+
 module.exports = {
   all,
   one,
   add,
   deleted,
+  query,
 };
