@@ -1,5 +1,6 @@
 const express = require("express");
 
+const security = require("./security.js");
 const responses = require("../../red/responses.js");
 const controller = require("./index.js");
 
@@ -7,8 +8,8 @@ const router = express.Router();
 
 router.get("/", all);
 router.get("/:id", one);
-router.post("/", add);
-router.put("/", deleted);
+router.post("/", security(), add);
+router.put("/", security(), deleted);
 
 async function all(req, res, next) {
   try {
